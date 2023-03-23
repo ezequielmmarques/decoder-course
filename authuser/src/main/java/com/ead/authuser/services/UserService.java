@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface UserService {
 
-   List<UserModel> findAll();
+    List<UserModel> findAll();
 
     Optional<UserModel> findById(UUID usersId);
 

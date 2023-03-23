@@ -1,6 +1,7 @@
 # Getting Started
 
 ### Reference Documentation
+
 For further reference, please consider the following sections:
 
 * [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
@@ -9,6 +10,7 @@ For further reference, please consider the following sections:
 * [Spring Web](https://docs.spring.io/spring-boot/docs/2.7.9/reference/htmlsingle/#web)
 
 ### Guides
+
 The following guides illustrate how to use some features concretely:
 
 * [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
@@ -18,4 +20,5 @@ The following guides illustrate how to use some features concretely:
 ### Documentation
 
 Postmann Documentation:
+
 * [Documentação das APIs criadas - User](https://documenter.getpostman.com/view/3577622/2s93RL1G2k)
