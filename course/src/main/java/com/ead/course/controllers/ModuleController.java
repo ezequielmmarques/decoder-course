@@ -42,7 +42,7 @@ public class ModuleController {
     public ResponseEntity<Object> saveModules(@PathVariable("courseId") UUID courseId,
                                               @RequestBody @Valid ModuleDto moduleDto) {
         Optional<CourseModel> courseModelOptional = courseService.findById(courseId);
-        if (!courseModelOptional.isPresent()) {
+        if (courseModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(COURSE_NOT_FOUND);
         }
         var moduleModel = new ModuleModel();
@@ -55,7 +55,7 @@ public class ModuleController {
     public ResponseEntity<Object> deleteModules(@PathVariable("courseId") UUID courseId,
                                                 @PathVariable("moduleId") UUID moduleId) {
         Optional<ModuleModel> moduleModelOptional = moduleService.findModuleIntoCourse(courseId, moduleId);
-        if (!moduleModelOptional.isPresent()) {
+        if (moduleModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MODULE_NOT_FOUND_FOR_COURSE);
         }
         moduleService.delete(moduleModelOptional.get());
@@ -67,7 +67,7 @@ public class ModuleController {
                                                @PathVariable("moduleId") UUID moduleId,
                                                @RequestBody @Valid ModuleDto moduleDto) {
         Optional<ModuleModel> moduleModelOptional = moduleService.findModuleIntoCourse(courseId, moduleId);
-        if (!moduleModelOptional.isPresent()) {
+        if (moduleModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MODULE_NOT_FOUND_FOR_COURSE);
         }
         var moduleModel = moduleModelOptional.get();
