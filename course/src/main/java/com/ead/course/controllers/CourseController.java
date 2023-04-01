@@ -44,7 +44,7 @@ public class CourseController {
     @DeleteMapping("/{courseId}")
     public ResponseEntity<Object> deleteCourse(@PathVariable("courseId") UUID courseId) {
         Optional<CourseModel> courseModelOptional = courseService.findById(courseId);
-        if (!courseModelOptional.isPresent()) {
+        if (courseModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(COURSE_NOT_FOUND);
         }
         courseService.delete(courseModelOptional.get());
@@ -56,7 +56,7 @@ public class CourseController {
                                                @RequestBody @Valid CourseDto courseDto) {
 
         Optional<CourseModel> courseModelOptional = courseService.findById(courseId);
-        if (!courseModelOptional.isPresent()) {
+        if (courseModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(COURSE_NOT_FOUND);
         }
         var courseModel = courseModelOptional.get();
@@ -76,7 +76,7 @@ public class CourseController {
     @GetMapping("/{courseId}")
     public ResponseEntity<Object> getOneCourse(@PathVariable("courseId") UUID courseId) {
         Optional<CourseModel> courseModelOptional = courseService.findById(courseId);
-        if (!courseModelOptional.isPresent()) {
+        if (courseModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(COURSE_NOT_FOUND);
         }
         return ResponseEntity.status(HttpStatus.OK).body(courseModelOptional);

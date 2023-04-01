@@ -58,7 +58,7 @@ public class LessonController {
     public ResponseEntity<Object> deleteLesson(@PathVariable("moduleId") UUID moduleId,
                                                 @PathVariable("lessonId") UUID lessonId) {
         Optional<LessonModel> lessonModelOptional = lessonService.findLessonIntoModule(moduleId, lessonId);
-        if (!lessonModelOptional.isPresent()) {
+        if (lessonModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MODULE_NOT_FOUND_FOR_COURSE);
         }
         lessonService.delete(lessonModelOptional.get());
@@ -70,7 +70,7 @@ public class LessonController {
                                                 @PathVariable("moduleId") UUID moduleId,
                                                 @RequestBody @Valid LessonDto lessonDto) {
         Optional<LessonModel> lessonModelOptional = lessonService.findLessonIntoModule(moduleId, lessonId);
-        if (!lessonModelOptional.isPresent()) {
+        if (lessonModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MODULE_NOT_FOUND_FOR_COURSE);
         }
         var lessonModel = lessonModelOptional.get();
