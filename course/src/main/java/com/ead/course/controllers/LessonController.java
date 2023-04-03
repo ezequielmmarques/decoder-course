@@ -9,6 +9,7 @@ import com.ead.course.services.ModuleService;
 import com.ead.course.specifications.SpecificationTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -46,7 +47,7 @@ public class LessonController {
     public ResponseEntity<Object> saveLesson(@PathVariable("moduleId") UUID moduleId,
                                              @RequestBody @Valid LessonDto lessonDto) {
         Optional<ModuleModel> moduleModelOptional = moduleService.findById(moduleId);
-        if (!moduleModelOptional.isPresent()) {
+        if (moduleModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MODULE_NOT_FOUND);
         }
         var lessonModel = new LessonModel();
@@ -86,10 +87,10 @@ public class LessonController {
     }
 
     @GetMapping("/modules/{moduleId}/lessons")
-    public ResponseEntity<List<LessonModel>> getAllLessons(SpecificationTemplate.LessonSpec lessonSpec,
+    public ResponseEntity<Page<LessonModel>> getAllLessons(SpecificationTemplate.LessonSpec lessonSpec,
                                                            @PageableDefault(page = 0, size = 10, sort = "lessonId", direction = Sort.Direction.ASC) Pageable pageable,
                                                            @PathVariable("moduleId") UUID moduleId) {
-        return ResponseEntity.status(HttpStatus.OK).body(lessonService.findAllByModule(moduleId));
+        return ResponseEntity.status(HttpStatus.OK).body(lessonService.findAllByModule(SpecificationTemplate.lessonModuleId(moduleId).and(lessonSpec), pageable));
     }
 
     @GetMapping("/modules/{moduleId}/lessons/{lessonId}")
