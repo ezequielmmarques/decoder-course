@@ -6,8 +6,12 @@ import com.ead.course.models.LessonModel;
 import com.ead.course.models.ModuleModel;
 import com.ead.course.services.LessonService;
 import com.ead.course.services.ModuleService;
+import com.ead.course.specifications.SpecificationTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -40,7 +44,7 @@ public class LessonController {
 
     @PostMapping("/modules/{moduleId}/lessons")
     public ResponseEntity<Object> saveLesson(@PathVariable("moduleId") UUID moduleId,
-                                              @RequestBody @Valid LessonDto lessonDto) {
+                                             @RequestBody @Valid LessonDto lessonDto) {
         Optional<ModuleModel> moduleModelOptional = moduleService.findById(moduleId);
         if (!moduleModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MODULE_NOT_FOUND);
@@ -56,7 +60,7 @@ public class LessonController {
 
     @DeleteMapping("/modules/{moduleId}/lessons/{lessonId}")
     public ResponseEntity<Object> deleteLesson(@PathVariable("moduleId") UUID moduleId,
-                                                @PathVariable("lessonId") UUID lessonId) {
+                                               @PathVariable("lessonId") UUID lessonId) {
         Optional<LessonModel> lessonModelOptional = lessonService.findLessonIntoModule(moduleId, lessonId);
         if (lessonModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MODULE_NOT_FOUND_FOR_COURSE);
@@ -67,8 +71,8 @@ public class LessonController {
 
     @PutMapping("/modules/{moduleId}/lessons/{lessonId}")
     public ResponseEntity<Object> updateLesson(@PathVariable("lessonId") UUID lessonId,
-                                                @PathVariable("moduleId") UUID moduleId,
-                                                @RequestBody @Valid LessonDto lessonDto) {
+                                               @PathVariable("moduleId") UUID moduleId,
+                                               @RequestBody @Valid LessonDto lessonDto) {
         Optional<LessonModel> lessonModelOptional = lessonService.findLessonIntoModule(moduleId, lessonId);
         if (lessonModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MODULE_NOT_FOUND_FOR_COURSE);
@@ -82,7 +86,9 @@ public class LessonController {
     }
 
     @GetMapping("/modules/{moduleId}/lessons")
-    public ResponseEntity<List<LessonModel>> getAllLessons(@PathVariable("moduleId") UUID moduleId) {
+    public ResponseEntity<List<LessonModel>> getAllLessons(SpecificationTemplate.LessonSpec lessonSpec,
+                                                           @PageableDefault(page = 0, size = 10, sort = "lessonId", direction = Sort.Direction.ASC) Pageable pageable,
+                                                           @PathVariable("moduleId") UUID moduleId) {
         return ResponseEntity.status(HttpStatus.OK).body(lessonService.findAllByModule(moduleId));
     }
 
