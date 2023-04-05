@@ -17,7 +17,7 @@ import java.util.UUID;
 public class LessonServiceImpl implements LessonService {
 
     @Autowired
-    LessonRepository  lessonRepository;
+    LessonRepository lessonRepository;
 
     @Override
     public LessonModel save(LessonModel lessonModel) {
