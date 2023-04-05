@@ -22,3 +22,8 @@ The following guides illustrate how to use some features concretely:
 Postmann Documentation:
 
 * [Documentação das APIs criadas - User](https://documenter.getpostman.com/view/3577622/2s93RL1G2k)
+
+
+### Commands utils
+
+- mvn spring-boot:run -Dspring-boot.run.arguments=--logging.level.com.ead=TRACE
