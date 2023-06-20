@@ -51,7 +51,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/")
-    public String index(){
+    public String index() {
         logger.trace("Trace - Visualização mais completa, maior nível de detalhes...");
         logger.debug("Debug - Visualização mais completa, a nível de desenvolvimento...");
         logger.info("Info - Visualização mais informativa.");
