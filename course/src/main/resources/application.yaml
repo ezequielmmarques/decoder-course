@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:55000/ead-course
+    url: jdbc:postgresql://localhost:5432/ead-course
     username: postgres
-    password: postgrespw
+    password: password
   jpa:
     hibernate:
       ddl-auto: update
