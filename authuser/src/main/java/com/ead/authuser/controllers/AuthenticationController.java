@@ -36,6 +36,9 @@ public class AuthenticationController {
     public ResponseEntity<Object> registerUser(@RequestBody
                                                @Validated(UserDto.UserView.RegistrationPost.class)
                                                @JsonView(UserDto.UserView.RegistrationPost.class) UserDto userDto) {
+
+        logger.debug("POT registerUser userDtio received {} ", userDto.toString());
+
         if (userService.existsByUsername(userDto.getUsername())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Username is already registered");
         }
