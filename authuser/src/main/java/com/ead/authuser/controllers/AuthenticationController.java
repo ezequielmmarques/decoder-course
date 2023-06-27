@@ -40,9 +40,11 @@ public class AuthenticationController {
         logger.debug("POT registerUser userDtio received {} ", userDto.toString());
 
         if (userService.existsByUsername(userDto.getUsername())) {
+            logger.warn("Username {} is already registered.", userDto.getUsername());
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Username is already registered");
         }
         if (userService.existsByEmail(userDto.getEmail())) {
+            logger.warn("Email {} is already registered.", userDto.getEmail());
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Email is already registered");
         }
         var userModel = new UserModel();
