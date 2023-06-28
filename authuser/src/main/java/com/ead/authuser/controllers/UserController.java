@@ -5,6 +5,8 @@ import com.ead.authuser.models.UserModel;
 import com.ead.authuser.services.UserService;
 import com.ead.authuser.specifications.SpecificationTemplate;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +35,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping("/users")
 public class UserController {
 
+    Logger logger = LogManager.getLogger(UserController.class);
 
     @Autowired
     UserService userService;
@@ -41,9 +44,10 @@ public class UserController {
     public ResponseEntity<Page<UserModel>> getAllUsers(SpecificationTemplate.UserSpec specification,
                                                        @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC)
                                                        Pageable pageable) {
+
         Page<UserModel> userModelPage = userService.findAll(specification, pageable);
-        if(!userModelPage.isEmpty()){
-            for(UserModel user : userModelPage.toList()){
+        if (!userModelPage.isEmpty()) {
+            for (UserModel user : userModelPage.toList()) {
                 user.add(linkTo(methodOn(UserController.class).getOneUser(user.getUserId())).withSelfRel());
             }
         }
@@ -58,12 +62,15 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Object> deleteOneUser(@PathVariable(value = "userId") UUID usersId) {
-        Optional<UserModel> userModelOptional = userService.findById(usersId);
+    public ResponseEntity<Object> deleteOneUser(@PathVariable(value = "userId") UUID userId) {
+        logger.info("DELETE deleteOneUser userId received {} ", userId);
+        Optional<UserModel> userModelOptional = userService.findById(userId);
         if (!userModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         } else {
             userService.delete(userModelOptional.get());
+            logger.debug("DELETE deleteUser userId received {} ", userId);
+            logger.info("User deleted with success {} ", userId);
             return ResponseEntity.status(HttpStatus.OK).body("User deleted with success");
         }
     }
@@ -94,6 +101,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         } else {
             if (!userModelOptional.get().getPassword().equals(userDto.getOldPassword())) {
+                logger.warn("Mismatched old password userId {} ", userDto.getUserId());
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Mismatched old password!");
             }
             var userModel = userModelOptional.get();
