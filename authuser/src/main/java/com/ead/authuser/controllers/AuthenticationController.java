@@ -37,7 +37,7 @@ public class AuthenticationController {
                                                @Validated(UserDto.UserView.RegistrationPost.class)
                                                @JsonView(UserDto.UserView.RegistrationPost.class) UserDto userDto) {
 
-        logger.debug("POT registerUser userDtio received {} ", userDto.toString());
+        logger.debug("POT registerUser userDtio received {} ", userDto);
 
         if (userService.existsByUsername(userDto.getUsername())) {
             logger.warn("Username {} is already registered.", userDto.getUsername());
